@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alphamed Business Solution</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6; /* Blue-500 */
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0d0d0d;
+            overflow: hidden; /* Prevent scrolling during intro */
+        }
+
+        /* Intro Screen Styles */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease-out;
+        }
+        
+        .intro-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+        
+        #intro-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .intro-logo-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .intro-logo {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: transparent;
+            background: linear-gradient(45deg, #00f2fe, #4facfe, #00f2fe);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(79, 172, 254, 0.2);
+            margin-bottom: 1rem;
+            transform: translateZ(50px);
+            animation: shine 3s linear infinite;
+        }
+        
+        .intro-tagline {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            transform: translateZ(30px);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .intro-tech-circle {
+            position: absolute;
+            border: 2px solid rgba(79, 172, 254, 0.2);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+        }
+        
+        .intro-circle-1 {
+            width: 300px;
+            height: 300px;
+            animation: rotate 20s linear infinite;
+            box-shadow: 0 0 50px rgba(79, 172, 254, 0.1);
+        }
+        
+        .intro-circle-2 {
+            width: 500px;
+            height: 500px;
+            animation: rotate 25s linear infinite reverse;
+            box-shadow: 0 0 50px rgba(0, 242, 254, 0.1);
+        }
+        
+        .intro-circle-3 {
+            width: 700px;
+            height: 700px;
+            animation: rotate 30s linear infinite;
+            box-shadow: 0 0 50px rgba(79, 172, 254, 0.1);
+        }
+        
+        .intro-hexagon {
+            position: absolute;
+            width: 60px;
+            height: 34.64px;
+            background: rgba(79, 172, 254, 0.1);
+            margin: 17.32px 0;
+            transform-style: preserve-3d;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.2);
+            animation: pulse 3s infinite;
+        }
+        
+        .intro-hexagon:before,
+        .intro-hexagon:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+        }
+        
+        .intro-hexagon:before {
+            bottom: 100%;
+            border-bottom: 17.32px solid rgba(79, 172, 254, 0.1);
+        }
+        
+        .intro-hexagon:after {
+            top: 100%;
+            border-top: 17.32px solid rgba(79, 172, 254, 0.1);
+        }
+        
+        .intro-hex-1 {
+            top: 20%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+        
+        .intro-hex-2 {
+            top: 70%;
+            right: 20%;
+            animation-delay: 1s;
+        }
+        
+        .intro-hex-3 {
+            bottom: 30%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+        
+        .intro-hex-4 {
+            top: 25%;
+            right: 25%;
+            animation-delay: 0.5s;
+        }
+        
+        .intro-loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 2rem;
+            overflow: hidden;
+            transform: translateZ(10px);
+        }
+        
+        .intro-progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotateX(5deg);
+            }
+            50% {
+                transform: translateY(-20px) rotateX(5deg);
+            }
+        }
+        
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg) translateZ(-100px);
+            }
+            to {
+                transform: rotate(360deg) translateZ(-100px);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.2;
+                transform: translateZ(40px) scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateZ(60px) scale(1.2);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .intro-logo {
+                font-size: 3rem;
+            }
+            
+            .intro-tagline {
+                font-size: 1rem;
+            }
+            
+            .intro-circle-1, .intro-circle-2, .intro-circle-3 {
+                display: none;
+            }
+        }
+
+        /* Main Website Styles */
+        #main-website {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        /* Thunder effect animation */
+        @keyframes thunderFlash {
+            0%, 50%, 100% { opacity: 0; }
+            5% { opacity: 0.2; }
+            10% { opacity: 0.1; }
+            20% { opacity: 0.3; }
+            25% { opacity: 0.1; }
+        }
+
+        /* Electric text animation */
+        @keyframes electricFlow {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px #0ff,
+                    0 0 20px #0ff,
+                    0 0 40px #0ff,
+                    0 0 80px #0ff;
+                transform: scale(1);
+            }
+            50% {
+                text-shadow:
+                    0 0 5px #0ff,
+                    0 0 10px #0ff,
+                    0 0 20px #0ff,
+                    0 0 40px #0ff;
+                transform: scale(1.02);
+            }
+        }
+
+        .thunder-bg::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,255,255,0.3) 0%, rgba(0,0,0,0) 70%);
+            animation: thunderFlash 10s infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .electric-text {
+            color: #fff;
+            animation: electricFlow 3s infinite alternate;
+        }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+        }
+        .scroll-top-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 leading-relaxed thunder-bg">
+
+    <!-- Intro Screen -->
+    <div id="intro-screen">
+        <div class="intro-container">
+            <div id="intro-particles"></div>
+            
+            <div class="intro-tech-circle intro-circle-1"></div>
+            <div class="intro-tech-circle intro-circle-2"></div>
+            <div class="intro-tech-circle intro-circle-3"></div>
+            
+            <div class="intro-hexagon intro-hex-1"></div>
+            <div class="intro-hexagon intro-hex-2"></div>
+            <div class="intro-hexagon intro-hex-3"></div>
+            <div class="intro-hexagon intro-hex-4"></div>
+            
+            <div class="intro-logo-container">
+                <h1 class="intro-logo">ALPHAMED</h1>
+                <p class="intro-tagline">BUSINESS SOLUTIONS</p>
+                <div class="intro-loading-bar">
+                    <div class="intro-progress" id="intro-progress"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Website Content (initially hidden) -->
+    <div id="main-website">
+        <!-- Header Navigation -->
+        <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-90 shadow-lg backdrop-blur-sm">
+            <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+                <a href="#home" class="text-xl font-bold text-white electric-text">AlphaMed</a>
+                <ul class="flex space-x-4 text-sm md:text-base">
+                    <li><a href="#home" class="text-gray-400 hover:text-white transition-colors duration-300">Home</a></li>
+                    <li><a href="#services" class="text-gray-400 hover:text-white transition-colors duration-300">Services</a></li>
+                    <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors duration-300">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main Content Sections -->
+        <main class="mt-20">
+            <!-- Home Section -->
+            <section id="home" class="min-h-screen flex items-center justify-center p-4">
+                <div class="text-center max-w-4xl">
+                    <h1 class="electric-text text-4xl md:text-6xl font-extrabold mb-4 uppercase">
+                        Alphamed Business Solution
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-400 mb-8">
+                        Empowering MSMEs in Cavite and beyond with innovative digital solutions.
+                    </p>
+                    <div class="space-y-6 md:space-y-0 md:space-x-6 md:flex justify-center">
+                        <a href="#services" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-full font-bold transition-transform transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Our Services
+                        </a>
+                        <a href="#contact" class="inline-block px-8 py-3 border border-blue-600 text-blue-300 rounded-full font-bold transition-colors duration-300 hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Get in Touch
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Company Overview -->
+            <section class="py-16 md:py-24 p-4">
+                <div class="container mx-auto max-w-4xl space-y-12">
+                    <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700">
+                        <h2 class="electric-text text-3xl md:text-4xl font-bold mb-4">Company Overview</h2>
+                        <p class="text-gray-300">
+                            Alphamed Business Solution is a Cavite-based technology solutions provider committed to empowering local businesses through innovative digital tools. We specialize in web design and development and offer a business support application designed to streamline operations, improve efficiency, and enhance customer engagement. With a passion for technology and a dedication to service, our goal is to help micro, small, and medium enterprises (MSMEs) in Cavite and beyond embrace digital transformation and achieve sustainable growth.
+                        </p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700">
+                            <h2 class="electric-text text-3xl md:text-4xl font-bold mb-4">Our Mission</h2>
+                            <p class="text-gray-300">
+                                To deliver accessible, reliable, and customized digital solutions that enable businesses to thrive in an increasingly digital-driven economy.
+                            </p>
+                        </div>
+
+                        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700">
+                            <h2 class="electric-text text-3xl md:text-4xl font-bold mb-4">Our Vision</h2>
+                            <p class="text-gray-300">
+                                To be the trusted partner of choice for businesses in Cavite and the Philippines, recognized for our innovation, reliability, and customer-focused digital solutions.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section id="services" class="py-16 md:py-24 p-4 bg-gray-900">
+                <div class="container mx-auto max-w-4xl text-center">
+                    <h2 class="electric-text text-4xl md:text-5xl font-extrabold mb-12">Our Services</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 transition-transform transform hover:scale-105">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 15.5l-5.5-5.5 1.5-1.5 4 4 7-7 1.5 1.5-8.5 8.5z"/></svg>
+                            <h3 class="text-2xl font-bold mb-2 text-white">Web Design & Development</h3>
+                            <ul class="text-gray-400 list-disc list-inside space-y-1 text-left">
+                                <li>Professional, responsive, and user-friendly websites</li>
+                                <li>24/7 online visibility</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 transition-transform transform hover:scale-105">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c-3.31 0-6 2.69-6 6v4h2v-4c0-2.21 1.79-4 4-4s4 1.79 4 4v4h2v-4c0-3.31-2.69-6-6-6zm0 13c-2.76 0-5 2.24-5 5h10c0-2.76-2.24-5-5-5z"/></svg>
+                            <h3 class="text-2xl font-bold mb-2 text-white">Business Support Application</h3>
+                            <ul class="text-gray-400 list-disc list-inside space-y-1 text-left">
+                                <li>Inventory and billing support</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 transition-transform transform hover:scale-105">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 16.5v-2h2v2h-2zm0-4v-7h2v7h-2z"/></svg>
+                            <h3 class="text-2xl font-bold mb-2 text-white">Ongoing Support & Maintenance</h3>
+                            <ul class="text-gray-400 list-disc list-inside space-y-1 text-left">
+                                <li>Technical support</li>
+                                <li>Regular system updates</li>
+                                <li>Troubleshooting and consultation services</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Choose Us Section -->
+            <section class="py-16 md:py-24 p-4">
+                <div class="container mx-auto max-w-4xl text-center">
+                    <h2 class="electric-text text-4xl md:text-5xl font-extrabold mb-12">Why Choose Alphamed?</h2>
+                    <div class="space-y-8">
+                        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 transition-transform transform hover:scale-105">
+                            <h3 class="text-2xl font-bold mb-2 text-white">Affordable Solutions</h3>
+                            <p class="text-gray-300">
+                                We provide cost-effective packages without compromising quality, making digital transformation accessible to all businesses.
+                            </p>
+                        </div>
+                        <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700 transition-transform transform hover:scale-105">
+                            <h3 class="text-2xl font-bold mb-2 text-white">Customer-Centered Approach</h3>
+                            <p class="text-gray-300">
+                                Our solutions are designed specifically around your unique goals and challenges to ensure you get the perfect tools for your needs.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="py-16 md:py-24 p-4 bg-gray-900">
+                <div class="container mx-auto max-w-2xl text-center">
+                    <h2 class="electric-text text-4xl md:text-5xl font-extrabold mb-8">Contact Us</h2>
+                    <div class="bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-700">
+                        <p class="text-lg text-white font-bold mb-4">Alphamed Business Solution</p>
+                        <p class="text-gray-300 mb-2">Cavite, Philippines</p>
+                        <div class="text-gray-400 space-y-2">
+                            <p class="flex items-center justify-center">
+                                <span class="mr-2">📞</span>
+                                <a href="tel:09954036719" class="text-blue-400 hover:underline">09954036719</a>
+                            </p>
+                            <p class="flex items-center justify-center">
+                                <span class="mr-2">📧</span>
+                                <a href="mailto:alphamedassistance@gmail.com" class="text-blue-400 hover:underline">alphamedassistance@gmail.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Scroll to top button -->
+        <button id="scrollTopBtn" class="scroll-top-btn px-4 py-2 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            ↑ Top
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize particles.js for intro
+            particlesJS('intro-particles', {
+                particles: {
+                    number: {
+                        value: 100,
+                        density: {
+                            enable: true,
+                            value_area: 800
+                        }
+                    },
+                    color: {
+                        value: "#4facfe"
+                    },
+                    shape: {
+                        type: "circle",
+                        stroke: {
+                            width: 0,
+                            color: "#000000"
+                        }
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 1,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 3,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 2,
+                            size_min: 0.3,
+                            sync: false
+                        }
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#4facfe",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false,
+                        attract: {
+                            enable: false,
+                            rotateX: 600,
+                            rotateY: 1200
+                        }
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "grab"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "push"
+                        },
+                        resize: true
+                    },
+                    modes: {
+                        grab: {
+                            distance: 140,
+                            line_linked: {
+                                opacity: 1
+                            }
+                        },
+                        push: {
+                            particles_nb: 4
+                        }
+                    }
+                },
+                retina_detect: true
+            });
+            
+            // Simulate loading progress
+            let progress = 0;
+            const progressBar = document.getElementById('intro-progress');
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(progressInterval);
+                    
+                    // After loading, transition to main website
+                    setTimeout(() => {
+                        const introScreen = document.getElementById('intro-screen');
+                        const mainWebsite = document.getElementById('main-website');
+                        
+                        // Fade out intro
+                        introScreen.style.opacity = 0;
+                        
+                        // Show main website
+                        setTimeout(() => {
+                            introScreen.style.display = 'none';
+                            mainWebsite.style.opacity = 1;
+                            document.body.style.overflow = 'auto'; // Re-enable scrolling
+                        }, 1000);
+                    }, 500);
+                }
+                progressBar.style.width = progress + '%';
+            }, 200);
+            
+            // Add mousemove parallax effect to intro
+            document.addEventListener('mousemove', (e) => {
+                const x = (window.innerWidth / 2 - e.clientX) / 25;
+                const y = (window.innerHeight / 2 - e.clientY) / 25;
+                
+                const logoContainer = document.querySelector('.intro-logo-container');
+                if (logoContainer) {
+                    logoContainer.style.transform = `translateY(${y}px) translateX(${x}px) rotateX(5deg)`;
+                }
+            });
+
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Show/hide scroll to top button
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+
+            // Scroll to top when button is clicked
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
